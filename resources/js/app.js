@@ -5,7 +5,7 @@
  */
 
 import './bootstrap';
-import { createApp } from 'vue';
+import {createApp} from 'vue';
 import {routes} from "./routes";
 import {createRouter, createWebHashHistory} from "vue-router";
 
@@ -21,6 +21,27 @@ const router = createRouter({
 })
 
 const app = createApp({});
+
+app.mixin({
+    data() {
+        return {
+            loading: false,
+        }
+    },
+    methods: {
+        getConsole() {
+            console.log(1);
+        },
+
+        showLoader(){
+            this.loading = true
+        },
+
+        hideLoader(){
+            this.loading = false
+        }
+    }
+});
 
 app.use(router);
 

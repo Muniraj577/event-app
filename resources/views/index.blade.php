@@ -14,6 +14,10 @@
 </head>
 <body>
 <div id="app" class="p-4">
+    <div ref="overlay"></div>
+    <div ref="loading" v-if="loading" style="position: absolute; left: 50%; top: 50%; z-index: 100000;">
+        <img src="{{asset('loader.gif')}}" class="img-fluid mx-auto d-block" style="height: 200px" alt="">
+    </div>
     <router-view></router-view>
 </div>
 @vite(['resources/js/app.js'])
