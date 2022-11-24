@@ -6,6 +6,8 @@
 
 import './bootstrap';
 import { createApp } from 'vue';
+import {routes} from "./routes";
+import {createRouter, createWebHashHistory} from "vue-router";
 
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
@@ -13,7 +15,14 @@ import { createApp } from 'vue';
  * to use in your application's views. An example is included for you.
  */
 
+const router = createRouter({
+    history: createWebHashHistory(import.meta.env.VITE_APP_URL),
+    routes,
+})
+
 const app = createApp({});
+
+app.use(router);
 
 // import ExampleComponent from './components/ExampleComponent.vue';
 import EventComponent from "./components/EventComponent.vue";

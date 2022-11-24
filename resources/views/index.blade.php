@@ -14,7 +14,7 @@
 </head>
 <body>
 <div id="app" class="p-4">
-    <event-component></event-component>
+    <router-view></router-view>
 </div>
 @vite(['resources/js/app.js'])
 </body>

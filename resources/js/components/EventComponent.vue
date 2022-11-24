@@ -5,10 +5,13 @@
                 <div class="card">
                     <div class="card-header bg-white d-flex justify-content-between">
                         <h6 class="my-auto">Event List</h6>
-                        <button type="submit" class="btn btn-primary rounded-0 text-center pe-4 ps-4 float-end me-3"
-                                data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                        <button type="button" @click="$router.push({name: 'AddEvent'})" class="btn btn-primary rounded-0 text-center pe-4 ps-4 float-end me-3">
                             New Event
                         </button>
+<!--                        <button type="submit" class="btn btn-primary rounded-0 text-center pe-4 ps-4 float-end me-3"-->
+<!--                                data-bs-toggle="modal" data-bs-target="#staticBackdrop">-->
+<!--                            New Event-->
+<!--                        </button>-->
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
