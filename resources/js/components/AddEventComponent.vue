@@ -16,7 +16,7 @@
                                 <div class="col-md-12">
                                     <label for="eventTitle" class="form-label">Event Title *</label>
                                     <input type="text" class="form-control" id="eventTitle" placeholder="Event Title *"
-                                           v-model="formData.title">
+                                           v-model="formData.title" required>
                                     <span class="text-danger" v-if="errors.title">
                                         {{errors.title[0]}}
                                     </span>
