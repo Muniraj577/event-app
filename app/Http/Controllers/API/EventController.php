@@ -16,7 +16,7 @@ class EventController extends Controller
     public function index(Request $request): JsonResponse
     {
         $events = Event::orderBy(DB::raw('CAST(start_date as date)'), 'asc')
-            ->paginate(5);
+            ->paginate(1);
         return EventResource::collection($events)
             ->response()
             ->setStatusCode(200);

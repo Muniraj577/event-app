@@ -7,7 +7,7 @@
 import './bootstrap';
 import {createApp} from 'vue';
 import {routes} from "./routes";
-import {createRouter, createWebHashHistory} from "vue-router";
+import {createRouter, createWebHashHistory, createWebHistory} from "vue-router";
 
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
@@ -15,8 +15,9 @@ import {createRouter, createWebHashHistory} from "vue-router";
  * to use in your application's views. An example is included for you.
  */
 
+
 const router = createRouter({
-    history: createWebHashHistory(import.meta.env.VITE_APP_URL),
+    history: createWebHistory(),
     routes,
 })
 
@@ -33,11 +34,11 @@ app.mixin({
             console.log(1);
         },
 
-        showLoader(){
+        showLoader() {
             this.loading = true
         },
 
-        hideLoader(){
+        hideLoader() {
             this.loading = false
         }
     }

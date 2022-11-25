@@ -5,13 +5,10 @@
                 <div class="card">
                     <div class="card-header bg-white d-flex justify-content-between">
                         <h6 class="my-auto">Event List</h6>
-                        <button type="button" @click="$router.push({name: 'AddEvent'})" class="btn btn-primary rounded-0 text-center pe-4 ps-4 float-end me-3">
+                        <button type="button" @click="$router.push({name: 'AddEvent'})"
+                                class="btn btn-primary rounded-0 text-center pe-4 ps-4 float-end me-3">
                             New Event
                         </button>
-<!--                        <button type="submit" class="btn btn-primary rounded-0 text-center pe-4 ps-4 float-end me-3"-->
-<!--                                data-bs-toggle="modal" data-bs-target="#staticBackdrop">-->
-<!--                            New Event-->
-<!--                        </button>-->
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -22,47 +19,30 @@
                                     <th scope="col">Title</th>
                                     <th scope="col">Start Date</th>
                                     <th scope="col">End Date</th>
+                                    <th scope="col">Is Completed</th>
                                     <th scope="col">Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                    <td></td>
+                                <tr v-for="(event, index) in events" :key="index">
+                                    <th scope="row">{{ index + 1 }}</th>
+                                    <td>{{ event.title }}</td>
+                                    <td>{{ event.formatted_start_date }}</td>
+                                    <td>{{ event.formatted_end_date }}</td>
+                                    <td>{{ event.is_completed === 1 ? 'Completed' : 'Not Completed' }}</td>
+                                    <td>
+                                        <button type="button"
+                                                @click="$router.push({name: 'EditEvent', params: {'id': event.id}})"
+                                                class="btn btn-primary rounded-0 text-center">
+                                            Edit Event
+                                        </button>
+                                    </td>
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-
-        <!--        Begin Event Modal-->
-        <!-- Button trigger modal -->
-        <!-- Modal -->
-        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-             aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl">
-                <form>
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="staticBackdropLabel">{{ title }} </h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            ...
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">{{ this.formData.id ? 'Update' : 'Save' }}</button>
-                        </div>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
@@ -75,13 +55,25 @@ export default {
     data() {
         return {
             title: 'Add New Event',
-            formData: {},
+            events: [],
         }
     },
 
     mounted() {
-        if (this.formData.id) {
-            this.title = 'Edit Event'
+        this.getEvents();
+    },
+
+    methods: {
+        getEvents() {
+            try {
+                axiosInstance.get('event')
+                    .then(res => {
+                        this.events = res.data;
+                        console.log(this)
+                    })
+            } catch (err) {
+                console.log({'errors': err})
+            }
         }
     }
 }
