@@ -8,7 +8,6 @@ import './bootstrap';
 import {createApp} from 'vue';
 import {routes} from "./routes";
 import {createRouter, createWebHashHistory, createWebHistory} from "vue-router";
-
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
  * registering components with the application instance so they are ready

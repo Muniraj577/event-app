@@ -24,8 +24,8 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr v-for="(event, index) in events" :key="index">
-                                    <th scope="row">{{ index + 1 }}</th>
+                                <tr v-for="(event, index) in events.data" :key="index">
+                                    <th scope="row">{{ page === 1 ? (index + 1) : ((page - 1) * perPage) + (index + 1) }}</th>
                                     <td>{{ event.title }}</td>
                                     <td>{{ event.formatted_start_date }}</td>
                                     <td>{{ event.formatted_end_date }}</td>
@@ -45,6 +45,8 @@
                                 </tr>
                                 </tbody>
                             </table>
+                            <Bootstrap5Pagination :data="events" :limit="2"
+                                                  @pagination-change-page="getEvents"/>
                         </div>
                     </div>
                 </div>
@@ -55,26 +57,35 @@
 
 <script>
 import {axiosInstance} from "../Api";
+import {Bootstrap5Pagination} from "laravel-vue-pagination";
 
 export default {
     data() {
         return {
             title: 'Add New Event',
-            events: [],
+            events: {},
+            page: null,
+            perPage: null,
         }
     },
 
+    components: {
+      Bootstrap5Pagination
+    },
+
     mounted() {
-        this.getEvents();
+        this.getEvents(1);
     },
 
     methods: {
-        getEvents() {
+        async getEvents(page) {
             this.showLoader();
+            this.page = page;
             try {
-                axiosInstance.get('event')
+                axiosInstance.get('event?page='+page)
                     .then(res => {
-                        this.events = res.data.data;
+                        this.events = res.data;
+                        this.perPage = res.data.meta.per_page
                     })
             } catch (err) {
                 this.hideLoader();
@@ -88,7 +99,7 @@ export default {
                 axiosInstance.delete(`event/${id}`)
                     .then(res => {
                         if (res.data.success === true) {
-                            this.getEvents();
+                            this.getEvents(1);
                             toastr.success(res.data.message)
                         }
                     }).catch(err => {
