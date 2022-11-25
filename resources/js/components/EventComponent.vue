@@ -36,6 +36,11 @@
                                                 class="btn btn-primary rounded-0 text-center">
                                             Edit Event
                                         </button>
+                                        <button type="button"
+                                                @click="deleteEvent(event.id)"
+                                                class="btn btn-danger rounded-0 text-center ms-2">
+                                            Delete Event
+                                        </button>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -74,6 +79,23 @@ export default {
             } catch (err) {
                 this.hideLoader();
                 console.log({'errors': err})
+            }
+        },
+
+        deleteEvent(id) {
+            if (confirm("Do you want to delete the event?")) {
+                this.showLoader();
+                axiosInstance.delete(`event/${id}`)
+                    .then(res => {
+                        if (res.data.success === true) {
+                            this.getEvents();
+                            toastr.success(res.data.message)
+                        }
+                    }).catch(err => {
+                    this.hideLoader();
+                    console.log(err);
+                });
+                this.hideLoader();
             }
         }
     }

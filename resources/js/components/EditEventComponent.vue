@@ -46,8 +46,8 @@
                                         {{ errors.description[0] }}
                                     </span>
                                 </div>
-                                <div class="col-md-12">
-                                    <button type="submit" class="btn btn-primary">Save
+                                <div class="col-md-12 mt-2">
+                                    <button type="submit" class="btn btn-primary rounded-0">Update
                                     </button>
                                 </div>
                             </div>
@@ -91,11 +91,13 @@ export default {
                     .then(res => {
                         if (res.data.success === true) {
                             this.$router.push({name: 'Event'});
+                            toastr.success(res.data.message);
                         }
                     })
             } catch (err) {
                 this.hideLoader();
                 this.errors = err.response.data.errors;
+                toastr.error(err.response.data.message);
                 console.log({'error': err});
             }
         }
