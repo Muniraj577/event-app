@@ -16,7 +16,12 @@ class EventController extends Controller
     public function index(Request $request): JsonResponse
     {
         $events = Event::query();
-        $events = $events->orderBy('start_date', 'asc') //DB::raw('CAST(start_date as date)')
+        $eventStatus = $request->event_status;
+        $events = $events
+            ->when($eventStatus != '' && $eventStatus != null && $eventStatus != 'null', function ($q) use ($eventStatus){
+                $q->filters($eventStatus);
+            })
+            ->orderBy('start_date', 'asc') //DB::raw('CAST(start_date as date)')
             ->paginate(20);
         return EventResource::collection($events)
             ->response()

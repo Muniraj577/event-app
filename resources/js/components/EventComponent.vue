@@ -12,7 +12,22 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-primary table-striped">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <select class="form-select" v-model="eventStatus" @change="getEvents(1)">
+                                        <option value="">Select Option</option>
+                                        <option v-for="(status, i) in event_status" :key="i" :value="status.value">
+                                            {{ status.label }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <button class="btn btn-primary btn-outline-light bg-primary text-white" @click="clearFilter">
+                                        <i class="bi bi-funnel"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <table class="table table-primary table-striped mt-5">
                                 <thead>
                                 <tr>
                                     <th scope="col">S.N</th>
@@ -25,7 +40,10 @@
                                 </thead>
                                 <tbody>
                                 <tr v-for="(event, index) in events.data" :key="index">
-                                    <th scope="row">{{ page === 1 ? (index + 1) : ((page - 1) * perPage) + (index + 1) }}</th>
+                                    <th scope="row">{{
+                                            page === 1 ? (index + 1) : ((page - 1) * perPage) + (index + 1)
+                                        }}
+                                    </th>
                                     <td>{{ event.title }}</td>
                                     <td>{{ event.formatted_start_date }}</td>
                                     <td>{{ event.formatted_end_date }}</td>
@@ -45,7 +63,7 @@
                                 </tr>
                                 </tbody>
                             </table>
-                            <Bootstrap5Pagination :data="events" :limit="2"
+                            <Bootstrap5Pagination :data="events" :limit="2" align="right"
                                                   @pagination-change-page="getEvents"/>
                         </div>
                     </div>
@@ -58,31 +76,41 @@
 <script>
 import {axiosInstance} from "../Api";
 import {Bootstrap5Pagination} from "laravel-vue-pagination";
+import {EVENT_STATUS} from "../constants/appConstants";
 
 export default {
     data() {
         return {
             title: 'Add New Event',
-            events: {},
+            events: [],
             page: null,
             perPage: null,
+            event_status: EVENT_STATUS,
+            eventStatus: '',
+            url: 'event?',
         }
     },
 
     components: {
-      Bootstrap5Pagination
+        Bootstrap5Pagination
     },
 
     mounted() {
-        this.getEvents(1);
+        this.getEvents(1, this.url);
     },
 
     methods: {
-        async getEvents(page) {
+        async getEvents(page, url) {
+            console.log(this.eventStatus)
             this.showLoader();
             this.page = page;
+            if (url == null && this.eventStatus == ''){
+                url = 'event?page='+page;
+            } else if (this.eventStatus != ''){
+                url = 'event?page='+page+'&event_status='+this.eventStatus;
+            }
             try {
-                axiosInstance.get('event?page='+page)
+                axiosInstance.get(url)
                     .then(res => {
                         this.events = res.data;
                         this.perPage = res.data.meta.per_page
@@ -108,7 +136,23 @@ export default {
                 });
                 this.hideLoader();
             }
+        },
+
+        clearFilter(){
+            this.eventStatus = '';
+            this.getEvents(1);
         }
-    }
+    },
+
+    // watch:{
+    //     eventStatus(val){
+    //         this.getEvents(1, `${this.url}page=${this.page}&event_status=${val}`);
+    //     },
+    //     'page': function (){
+    //         if (this.eventStatus){
+    //             this.getEvents(1, `${this.url}page=${this.page}&event_status=${this.eventStatus}`);
+    //         }
+    //     }
+    // }
 }
 </script>
