@@ -65,13 +65,14 @@ export default {
 
     methods: {
         getEvents() {
+            this.showLoader();
             try {
                 axiosInstance.get('event')
                     .then(res => {
-                        this.events = res.data;
-                        console.log(this)
+                        this.events = res.data.data;
                     })
             } catch (err) {
+                this.hideLoader();
                 console.log({'errors': err})
             }
         }

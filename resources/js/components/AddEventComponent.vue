@@ -71,7 +71,6 @@ export default {
     },
 
     mounted() {
-        this.getConsole();
         this.showLoader();
     },
 
@@ -80,11 +79,11 @@ export default {
             this.showLoader();
             await axiosInstance.post('event', this.formData)
                 .then(res => {
-                    console.log(res);
                     if (res.data.success === true){
                         this.$router.push({'name': 'Event'});
                     }
                 }).catch(err => {
+                    this.hideLoader()
                     this.errors = err.response.data.errors;
                 })
         }

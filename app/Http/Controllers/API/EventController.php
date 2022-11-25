@@ -16,27 +16,75 @@ class EventController extends Controller
     public function index(Request $request): JsonResponse
     {
         $events = Event::orderBy(DB::raw('CAST(start_date as date)'), 'asc')
-            ->paginate(1);
+            ->paginate(20);
         return EventResource::collection($events)
             ->response()
             ->setStatusCode(200);
     }
 
-    public function store(EventRequest $request)
+    public function store(EventRequest $request): JsonResponse
     {
-        try{
+        try {
             DB::beginTransaction();
             $event = Event::create($request->all());
             DB::commit();
             return response()->json([
-               'success' => true,
-               'message' => 'Event created successfully',
+                'success' => true,
+                'message' => 'Event created successfully',
             ]);
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
-               'message' => 'Something went wrong'
+                'message' => 'Something went wrong',
+                'success' => false,
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function edit($id)
+    {
+        $event = Event::where('id', $id)->firstOrFail();
+        return (new EventResource($event))
+            ->response()
+            ->setStatusCode(200);
+    }
+
+    public function update(EventRequest $request, Event $event): JsonResponse
+    {
+        try {
+            DB::beginTransaction();
+            $data = $request->all();
+            $event->update($data);
+            DB::commit();
+            return response()->json([
+                'message' => 'Event updated successfully',
+                'success' => true,
+            ], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'message' => 'Something Went Wrong',
+                'success' => false
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function destroy(Event $event): JsonResponse
+    {
+        try {
+            DB::beginTransaction();
+            $event->delete();
+            DB::commit();
+            return response()->json([
+                'message' => 'Event deleted !!!',
+                'success' => true,
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'message' => 'Something went wrong',
+                'success' => false,
+            ]);
         }
     }
 }
