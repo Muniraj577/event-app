@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class Event extends Model
 {
@@ -26,6 +27,7 @@ class Event extends Model
             })->when($value == EventStatus::UpcomingEventWithin7Days, function ($q) {
                 $q->whereDate('start_date', '>', Carbon::now())
                     ->whereDate('start_date', '<', Carbon::now()->addDays(7));
+//                $q->whereBetween(DB::raw('CAST(start_date as datetime)'), [Carbon::now()->addDay(), Carbon::now()->addDays(7)]);
             })->when($value == EventStatus::FinishedEventsOfLast7Days, function ($q){
                 $q->whereDate('end_date', '<', Carbon::now())
                     ->whereDate('end_date', '>', Carbon::now()->subDays(7));
