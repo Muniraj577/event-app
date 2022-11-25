@@ -16,7 +16,7 @@
                                 <div class="col-md-12">
                                     <label for="eventTitle" class="form-label">Event Title *</label>
                                     <input type="text" class="form-control" id="eventTitle" placeholder="Event Title *"
-                                           v-model="formData.title" required>
+                                           v-model="formData.title">
                                     <span class="text-danger" v-if="errors.title">
                                         {{errors.title[0]}}
                                     </span>
@@ -61,6 +61,7 @@
 
 <script>
 import {axiosInstance} from "../Api";
+import {ValidationMixins} from "../mixins/ValidationMixins";
 
 export default {
     data() {
@@ -69,6 +70,10 @@ export default {
             errors: [],
         }
     },
+
+    mixins: [
+      ValidationMixins,
+    ],
 
     mounted() {
         this.showLoader();
