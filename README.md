@@ -13,7 +13,7 @@ git clone git@github.com:Muniraj577/event-app.git
 git clone https://github.com/Muniraj577/event-app.git
 ```
 
-#### Run Composer install to install all the packaeges
+#### Run Composer install to install all the packages
 ```
 composer install
 ```
