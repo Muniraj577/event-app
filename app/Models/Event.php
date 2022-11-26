@@ -17,7 +17,7 @@ class Event extends Model
         'title', 'description', 'start_date', 'end_date', 'is_completed'
     ];
 
-    public function scopeFilters($query, $filter=null)
+    public function scopeFilters($query, $filter=null): object
     {
         return $query->when($filter, function($q, $value){
             $q->when($value==EventStatus::FinishedEvents, function ($q){
