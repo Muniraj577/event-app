@@ -19,7 +19,8 @@ class EventDateTest extends TestCase
            'description' => 'Lorem ipsum content',
            'start_date' => '2022-11-26 10:54:00',
         ]);
-        $this->assertEquals('2022-11-26', $event->formatted_date);
-        $this->assertTrue(true);
+        $this->assertEquals('2022-11-26', formatDate('Y-m-d', $event->start_date)); //test helper function
+        $this->assertEquals('2022-11-26', $event->formatted_date); //test model attribute function
+//        $this->assertTrue(true);
     }
 }
